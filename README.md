@@ -1,6 +1,6 @@
 # playwright-custom-report — custom HTML reporter
 
-Minimal Playwright workspace (`npm` package **playwright-custom-report**) you can **copy or push as its own internal repository** to show teams how to wire this custom HTML reporter. The report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
+The report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
 
 ## What is in this folder
 
@@ -24,10 +24,10 @@ Set **`DOCUMENTATION_MODE`** in `src/config/documentation-mode.ts` to `"on"` loc
 
 ## Quick start
 
-1. Copy this entire folder into a new git repo (or use this directory as the repo root). The npm package name is **playwright-custom-report** in `package.json`.
-2. `npm install`
-3. `npx playwright install` (browsers, first time only)
-4. `npm test`
+1. After cloning the repo, open it in your favorite IDE.
+2. `npm install` (npm dependencies)
+3. `npx playwright install` (plawright browsers)
+4. `npm test` (run playwright test)
 5. After the run finishes, open **`custom-report/index.html`** (absolute path is also printed in Test Output / terminal under `[custom-report]`).
 
 Optional: `npm run report:custom` opens Playwright’s viewer for that folder (same as `playwright show-report custom-report`).
