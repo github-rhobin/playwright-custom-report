@@ -57,6 +57,6 @@ The Playwright extension’s test host can use a **different `process.cwd()`** t
 ## Demo
 
 
-https://github.com/user-attachments/assets/5cc1440a-23be-4d2d-a8b5-413811990c81
+<video src="https://github.com/user-attachments/assets/5cc1440a-23be-4d2d-a8b5-413811990c81" controls="controls" style="max-width: 100%;"></video>
 
 
