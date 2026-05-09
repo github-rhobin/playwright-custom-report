@@ -1,7 +1,7 @@
 {
   "name": "playwright-custom-report",
   "version": "1.0.0",
-  "description": "Playwright project (playwright-custom-report) with custom HTML reporter — CLI and VS Code / Cursor extension–friendly.",
+  "description": "Playwright project with custom HTML reporter — CLI and VS Code / Cursor extension–friendly.",
   "main": "index.js",
   "scripts": {
     "test": "playwright test",

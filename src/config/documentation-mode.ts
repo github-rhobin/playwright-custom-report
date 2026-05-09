@@ -1,7 +1,7 @@
 /**
  * Toggle {@link DOCUMENTATION_MODE} for local runs; CI always behaves like `"off"`.
  */
-export const DOCUMENTATION_MODE = "off" as "off" | "on";
+export const DOCUMENTATION_MODE = "on" as "off" | "on";
 
 
 /**
