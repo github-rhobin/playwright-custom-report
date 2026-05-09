@@ -1,0 +1,154 @@
+/**
+ * Status filter strip + tag chrome. Loaded as assets/report-chrome.css?cacheBust so VS Code / Cursor
+ * Simple Browser and other embedded viewers pick up changes (they often cache inline <style> heavily).
+ * Theme tokens (--text, --accent, …) come from the inline block in index.html; keep this file after that block.
+ */
+ .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat {
+    padding: 0.35rem 0.55rem;
+    border-radius: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .stat-filter {
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+  }
+  .stat-filter:hover {
+    border-color: var(--accent);
+    background: var(--bg);
+  }
+  /** Inactive status tiles: body text; no accent on the count until active. */
+  .stat.stat-filter:not(.is-active),
+  .stat.stat-filter:not(.is-active):hover,
+  .stat.stat-filter:not(.is-active):focus-visible {
+    color: var(--text);
+    border-color: var(--border);
+    box-shadow: none;
+    background: var(--bg);
+  }
+  .stat.stat-filter:not(.is-active) strong,
+  .stat.stat-filter:not(.is-active):hover strong,
+  .stat.stat-filter:not(.is-active):focus-visible strong {
+    color: inherit;
+    font-weight: 700;
+  }
+  /**
+   * Pass-green active highlight only for the Passed tile. (Avoid a broad
+   * :not(.stat-filter-all) rule: class-based :not() raises specificity and beats
+   * .stat-filter.stat-fail.is-active, which wrongly painted Failed / Flaky green.)
+   */
+  .stat.stat-filter.is-active[data-filter="passed"],
+  .stat.stat-filter.is-active[data-filter="passed"]:hover,
+  .stat.stat-filter.is-active[data-filter="passed"]:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+    background: rgba(16, 185, 129, 0.12);
+  }
+  [data-theme="light"] .stat.stat-filter.is-active[data-filter="passed"],
+  [data-theme="light"] .stat.stat-filter.is-active[data-filter="passed"]:hover,
+  [data-theme="light"] .stat.stat-filter.is-active[data-filter="passed"]:focus-visible {
+    background: rgba(5, 150, 105, 0.12);
+  }
+  .stat.stat-filter.is-active[data-filter="passed"] strong,
+  .stat.stat-filter.is-active[data-filter="passed"]:hover strong {
+    color: #34d399;
+  }
+  [data-theme="light"] .stat.stat-filter.is-active[data-filter="passed"] strong,
+  [data-theme="light"] .stat.stat-filter.is-active[data-filter="passed"]:hover strong {
+    color: #047857;
+  }
+  /** "All" — neutral sky (not pass-green); include :hover so .stat-filter:hover never wins */
+  .stat.stat-filter.stat-filter-all.is-active,
+  .stat.stat-filter.stat-filter-all.is-active:hover,
+  .stat.stat-filter.stat-filter-all.is-active:focus-visible {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px #38bdf8;
+    background: rgba(56, 189, 248, 0.14);
+  }
+  [data-theme="light"] .stat.stat-filter.stat-filter-all.is-active,
+  [data-theme="light"] .stat.stat-filter.stat-filter-all.is-active:hover,
+  [data-theme="light"] .stat.stat-filter.stat-filter-all.is-active:focus-visible {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 1px #0284c7;
+    background: rgba(14, 165, 233, 0.12);
+  }
+  .stat.stat-filter.stat-filter-all.is-active strong,
+  .stat.stat-filter.stat-filter-all.is-active:hover strong {
+    color: #7dd3fc;
+  }
+  [data-theme="light"] .stat.stat-filter.stat-filter-all.is-active strong,
+  [data-theme="light"] .stat.stat-filter.stat-filter-all.is-active:hover strong {
+    color: #0369a1;
+  }
+  /** "Skipped" — slate (not pass-green) */
+  .stat.stat-filter.stat-filter-skipped.is-active,
+  .stat.stat-filter.stat-filter-skipped.is-active:hover,
+  .stat.stat-filter.stat-filter-skipped.is-active:focus-visible {
+    border-color: var(--skip);
+    box-shadow: 0 0 0 1px var(--skip);
+    background: rgba(148, 163, 184, 0.18);
+  }
+  [data-theme="light"] .stat.stat-filter.stat-filter-skipped.is-active,
+  [data-theme="light"] .stat.stat-filter.stat-filter-skipped.is-active:hover,
+  [data-theme="light"] .stat.stat-filter.stat-filter-skipped.is-active:focus-visible {
+    border-color: var(--skip);
+    box-shadow: 0 0 0 1px var(--skip);
+    background: rgba(100, 116, 139, 0.16);
+  }
+  .stat.stat-filter.stat-filter-skipped.is-active strong,
+  .stat.stat-filter.stat-filter-skipped.is-active:hover strong {
+    color: var(--skip);
+  }
+  [data-theme="light"] .stat.stat-filter.stat-filter-skipped.is-active strong,
+  [data-theme="light"] .stat.stat-filter.stat-filter-skipped.is-active:hover strong {
+    color: #475569;
+  }
+  .stat.stat-filter.stat-fail.is-active,
+  .stat.stat-filter.stat-fail.is-active:hover,
+  .stat.stat-filter.stat-fail.is-active:focus-visible {
+    border-color: var(--fail);
+    box-shadow: 0 0 0 1px var(--fail);
+    background: rgba(239, 68, 68, 0.1);
+  }
+  .stat.stat-filter.stat-fail.is-active strong,
+  .stat.stat-filter.stat-fail.is-active:hover strong {
+    color: #f87171;
+  }
+  [data-theme="light"] .stat.stat-filter.stat-fail.is-active strong,
+  [data-theme="light"] .stat.stat-filter.stat-fail.is-active:hover strong {
+    color: #b91c1c;
+  }
+  .stat.stat-filter.stat-flaky.is-active,
+  .stat.stat-filter.stat-flaky.is-active:hover,
+  .stat.stat-filter.stat-flaky.is-active:focus-visible {
+    border-color: #d97706;
+    box-shadow: 0 0 0 1px #d97706;
+    background: rgba(217, 119, 6, 0.12);
+  }
+  .stat.stat-filter.stat-flaky.is-active strong,
+  .stat.stat-filter.stat-flaky.is-active:hover strong {
+    color: #fbbf24;
+  }
+  [data-theme="light"] .stat.stat-filter.stat-flaky.is-active strong,
+  [data-theme="light"] .stat.stat-filter.stat-flaky.is-active:hover strong {
+    color: #b45309;
+  }
+  
