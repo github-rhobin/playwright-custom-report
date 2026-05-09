@@ -1,9 +1,10 @@
 # Playwright Custom Reporter
 
-This reporter displays each screenshot attachment next to the test step which can be useful during test results walkthrough in additiona to video and trace files.  
+This reporter displays each screenshot attachment next to the test step which can be useful during test results walkthrough in additiona to video and trace files.
+
 The html report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
 
-## What is in this folder
+## What is in this project?
 
 | Path                                     | Purpose                                                                                 |
 | ---------------------------------------- | --------------------------------------------------------------------------------------- |
@@ -52,3 +53,10 @@ The Playwright extension’s test host can use a **different `process.cwd()`** t
 - **Report looks stale (old CSS/JS)** — Embedded viewers cache `report-ui.js` / `report-chrome.css` aggressively; hard-refresh or reopen `index.html`. Each run uses a cache-bust query on those assets.
 - **Wrong folder / empty report** — Confirm `repositoryRoot: PLAYWRIGHT_CONFIG_DIR` is set and `playwright-repo-root.cjs` lives next to `playwright.config.ts`.
 - **Do not confuse** Playwright’s default **`playwright-report/`** (Show HTML Report) with **`custom-report/`** — they are separate outputs.
+
+## Demo
+
+
+https://github.com/user-attachments/assets/5cc1440a-23be-4d2d-a8b5-413811990c81
+
+
