@@ -4,26 +4,21 @@ This reporter displays each screenshot attachment next to the test step which ca
 
 The html report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
 
-
-
 <video src="https://github.com/user-attachments/assets/5cc1440a-23be-4d2d-a8b5-413811990c81" controls="controls" style="max-width: 100%;"></video>
-
-
-
 
 ## What is in this project?
 
-| Path                                     | Purpose                                                                                 |
-| ---------------------------------------- | --------------------------------------------------------------------------------------- |
+| Path                                    | Purpose                                                                                 |
+| --------------------------------------- | --------------------------------------------------------------------------------------- |
 | `src/reporter/custom-report.ts`         | Reporter implementation                                                                 |
 | `src/reporter/custom-report-ui.js`      | Client script (copied into report `assets/` at run end)                                 |
 | `src/reporter/custom-report-chrome.css` | Status strip / chrome styles for embedded viewers                                       |
-| `playwright-repo-root.cjs`               | Stable repo root (`__dirname` of the shim; not `process.cwd()`)                         |
-| `playwright.config.ts`                   | Registers the reporter with `repositoryRoot: PLAYWRIGHT_CONFIG_DIR`                     |
-| `src/config/documentation-mode.ts`       | Local **documentation** toggle; when on, `takeScreenshot` attaches PNGs (CI always off) |
-| `src/utils/screenshot-util.ts`           | `takeScreenshot(page, label)` — attach viewport PNG under the **current** `test.step`   |
-| `src/utils/step-decorator-util.ts`       | `@step("Name")` — wraps page-object methods in `test.step` for the same hierarchy       |
-| `tests/example.spec.ts`                  | Examples: inline `test.step` + screenshots, and `@step` on a small page class           |
+| `playwright-repo-root.cjs`              | Stable repo root (`__dirname` of the shim; not `process.cwd()`)                         |
+| `playwright.config.ts`                  | Registers the reporter with `repositoryRoot: PLAYWRIGHT_CONFIG_DIR`                     |
+| `src/config/documentation-mode.ts`      | Local **documentation** toggle; when on, `takeScreenshot` attaches PNGs (CI always off) |
+| `src/utils/screenshot-util.ts`          | `takeScreenshot(page, label)` — attach viewport PNG under the **current** `test.step`   |
+| `src/utils/step-decorator-util.ts`      | `@step("Name")` — wraps page-object methods in `test.step` for the same hierarchy       |
+| `tests/example.spec.ts`                 | Examples: inline `test.step` + screenshots, and `@step` on a small page class           |
 
 ### Step screenshots in the custom HTML report
 
@@ -60,4 +55,3 @@ The Playwright extension’s test host can use a **different `process.cwd()`** t
 - **Report looks stale (old CSS/JS)** — Embedded viewers cache `report-ui.js` / `report-chrome.css` aggressively; hard-refresh or reopen `index.html`. Each run uses a cache-bust query on those assets.
 - **Wrong folder / empty report** — Confirm `repositoryRoot: PLAYWRIGHT_CONFIG_DIR` is set and `playwright-repo-root.cjs` lives next to `playwright.config.ts`.
 - **Do not confuse** Playwright’s default **`playwright-report/`** (Show HTML Report) with **`custom-report/`** — they are separate outputs.
-
