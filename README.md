@@ -1,6 +1,7 @@
-# playwright-custom-report — custom HTML reporter
+# Playwright Custom Reporter
 
-The report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
+This reporter displays each screenshot attachment next to the test step which can be useful during test results walkthrough in additiona to video and trace files.  
+The html report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
 
 ## What is in this folder
 
