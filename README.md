@@ -1,6 +1,6 @@
 # Playwright Custom Reporter
 
-This reporter displays each screenshot attachment next to the test step which can be useful during test results walkthrough in additiona to video and trace files.
+This reporter displays each screenshot attachment next to the test step which can be useful during test results walkthrough in addition to video and trace files.
 
 The html report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
 
@@ -57,6 +57,8 @@ The Playwright extension’s test host can use a **different `process.cwd()`** t
 ## Demo
 
 
+
 <video src="https://github.com/user-attachments/assets/5cc1440a-23be-4d2d-a8b5-413811990c81" controls="controls" style="max-width: 100%;"></video>
+
 
 
