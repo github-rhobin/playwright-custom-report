@@ -1,34 +1,26 @@
-import { APIResponse, TestInfo } from "@playwright/test";
+import type { TestStepInfo } from "@playwright/test";
 
-export async function attachApiResponse(
-  name: string,
-  response: APIResponse,
-  testInfo: TestInfo,
-) {
-  const body = await response.json().catch(() => response.text());
-  const status = response.status();
-  const headers = response.headers();
-
-  const reportData = {
-    url: response.url(),
-    status,
-    headers,
-    body,
-  };
-
-  await testInfo.attach(name, {
-    body: JSON.stringify(reportData, null, 2),
-    contentType: "application/json",
-  });
+function serializeJson(data: unknown): string {
+  return JSON.stringify(data, null, 2);
 }
 
-export async function attachApiRequestBody(
+/**
+ * Attach pretty-printed JSON to the **current** `test.step` (use {@link TestStepInfo.attach}).
+ * Skips attaching when `data` is `null` or `undefined` (e.g. no request body for GET).
+ *
+ * The custom HTML reporter inlines `application/json` attachments as a code block under the step,
+ * similar to step screenshots.
+ */
+export async function attachStepJson(
+  step: TestStepInfo,
   name: string,
-  data: any,
-  testInfo: TestInfo,
-) {
-  await testInfo.attach(name, {
-    body: JSON.stringify(data, null, 2),
+  data: unknown,
+): Promise<void> {
+  if (data === null || data === undefined) {
+    return;
+  }
+  await step.attach(name, {
+    body: serializeJson(data),
     contentType: "application/json",
   });
 }
