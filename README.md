@@ -4,7 +4,7 @@ This reporter displays each screenshot attachment next to the test step which ca
 
 The html report is written to `custom-report/index.html` (with `assets/`), designed to work when tests are started from the **VS Code / Cursor Playwright extension** as well as from the CLI.
 
-<video src="https://github.com/user-attachments/assets/5cc1440a-23be-4d2d-a8b5-413811990c81" controls="controls" style="max-width: 100%;"></video>
+<video src="https://github.com/user-attachments/assets/d0402ad5-6c0e-4156-af98-b2409fbf5601" controls="controls" style="max-width: 100%;"></video>
 
 ## What is in this project?
 
