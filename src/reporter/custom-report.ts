@@ -1663,7 +1663,7 @@ export default class CustomReport implements Reporter {
               overflow-x: auto;
               white-space: pre;
               color: var(--text);
-              max-height: 320px;
+              max-height: 500px;
               overflow-y: auto;
             }
             .step-code-block code {

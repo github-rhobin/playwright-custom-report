@@ -29,10 +29,18 @@ test(
       },
     );
 
+    const status = response.status();
+    const statusText = response.statusText();
+    const headers = response.headers();
     const responseBody = await response.json();
 
+    const fullResponse = {
+      status, statusText, headers, responseBody,
+    }
+
+
     await test.step("Attach API response body", async (step) => {
-      await attachStepJson(step, "Response body", responseBody);
+      await attachStepJson(step, "Response body", fullResponse);
     });
 
     await test.step("Validate Response Status", async () => {
