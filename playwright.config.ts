@@ -58,7 +58,7 @@ export default defineConfig({
   projects: [
     {
       name: "web-tests",
-      testMatch: /\.web\.spec\.ts$/,
+      testMatch: "**/*.web.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
         viewport: {
@@ -69,7 +69,7 @@ export default defineConfig({
     },
     {
       name: "api-tests",
-      testMatch: /\.api\.spec\.ts$/,
+      testMatch: "**/*.api.spec.ts",
     },
 
     // {
