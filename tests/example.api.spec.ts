@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { attachStepJson } from "../src/utils/api-util";
 
 test(
-  "API test - POST request",
+  "RestfulBookerHerokuApp Test",
   { tag: "@api-test" },
   async ({ request }) => {
     const requestData = {
@@ -39,8 +39,8 @@ test(
     }
 
 
-    await test.step("Attach API response body", async (step) => {
-      await attachStepJson(step, "Response body", fullResponse);
+    await test.step("Attach API full response", async (step) => {
+      await attachStepJson(step, "Full Response", fullResponse);
     });
 
     await test.step("Validate Response Status", async () => {

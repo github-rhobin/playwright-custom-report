@@ -1,4 +1,4 @@
-import type { TestStepInfo } from "@playwright/test";
+import type { TestStepInfo, APIResponse } from "@playwright/test";
 
 function serializeJson(data: unknown): string {
   return JSON.stringify(data, null, 2);
@@ -23,4 +23,16 @@ export async function attachStepJson(
     body: serializeJson(data),
     contentType: "application/json",
   });
+}
+
+/**
+ * Extracts and formats status, headers, and body from an APIResponse.
+ */
+export async function getFullResponse(response: APIResponse) {
+  return {
+    status: response.status(),
+    statusText: response.statusText(),
+    headers: response.headers(),
+    body: await response.json(),
+  };
 }
