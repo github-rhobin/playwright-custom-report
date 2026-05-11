@@ -8,17 +8,18 @@ The html report is written to `custom-report/index.html` (with `assets/`), desig
 
 ## What is in this project?
 
-| Path                                    | Purpose                                                                                 |
-| --------------------------------------- | --------------------------------------------------------------------------------------- |
-| `src/reporter/custom-report.ts`         | Reporter implementation                                                                 |
-| `src/reporter/custom-report-ui.js`      | Client script (copied into report `assets/` at run end)                                 |
-| `src/reporter/custom-report-chrome.css` | Status strip / chrome styles for embedded viewers                                       |
-| `playwright-repo-root.cjs`              | Stable repo root (`__dirname` of the shim; not `process.cwd()`)                         |
-| `playwright.config.ts`                  | Registers the reporter with `repositoryRoot: PLAYWRIGHT_CONFIG_DIR`                     |
-| `src/config/documentation-mode.ts`      | Local **documentation** toggle; when on, `takeScreenshot` attaches PNGs (CI always off) |
-| `src/utils/screenshot-util.ts`          | `takeScreenshot(page, label)` — attach viewport PNG under the **current** `test.step`   |
-| `src/utils/step-decorator-util.ts`      | `@step("Name")` — wraps page-object methods in `test.step` for the same hierarchy       |
-| `tests/example.spec.ts`                 | Examples: inline `test.step` + screenshots, and `@step` on a small page class           |
+| Path                                    | Purpose                                                                                             |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `src/reporter/custom-report.ts`         | Reporter implementation                                                                             |
+| `src/reporter/custom-report-ui.js`      | Client script (copied into report `assets/` at run end)                                             |
+| `src/reporter/custom-report-chrome.css` | Status strip / chrome styles for embedded viewers                                                   |
+| `playwright-repo-root.cjs`              | Stable repo root (`__dirname` of the shim; not `process.cwd()`)                                     |
+| `playwright.config.ts`                  | Registers the reporter with `repositoryRoot: PLAYWRIGHT_CONFIG_DIR`                                 |
+| `src/config/documentation-mode.ts`      | Local **documentation** toggle; when on, `takeScreenshot` attaches PNGs (CI always off)             |
+| `src/utils/api-util.ts`                 | `attachStepJson(step, name, data)` — attach serialized JSON object under the **current** `test.step`|
+| `src/utils/screenshot-util.ts`          | `takeScreenshot(page, label)` — attach viewport PNG under the **current** `test.step`               |
+| `src/utils/step-decorator-util.ts`      | `@step("Name")` — wraps page-object methods in `test.step` for the same hierarchy                   |
+| `tests/example.spec.ts`                 | Examples: inline `test.step` + screenshots, and `@step` on a small page class                       |
 
 ### Step screenshots in the custom HTML report
 
