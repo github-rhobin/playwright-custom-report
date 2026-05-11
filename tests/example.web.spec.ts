@@ -4,7 +4,7 @@ import { step } from "../src/utils/step-decorator-util";
 
 test(
   "inline test.step() + takeScreenshot()",
-  { tag: ["@plain-style"] },
+  { tag: ["@plain-style", "@web-test"] },
   async ({ page }) => {
     await test.step("Open Playwright site", async () => {
       await page.goto("https://playwright.dev/");
@@ -37,7 +37,7 @@ class PlaywrightDocsPage {
 
 test(
   "step() decorator + takeScreenshot() + page object class",
-  { tag: ["@page-object-style"] },
+  { tag: ["@page-object-style", "@web-test"] },
   async ({ page }) => {
     const docs = new PlaywrightDocsPage(page);
     await docs.openHome();
@@ -47,7 +47,7 @@ test(
 
 test(
   "to-fail test + trace.zip",
-  { tag: ["@plain-style"] },
+  { tag: ["@plain-style", "@web-test"] },
   async ({ page }) => {
     await test.step("Open Playwright site", async () => {
       await page.goto("https://playwright.dev/");

@@ -26,6 +26,8 @@ type StepModel = {
   failed: boolean;
   errorMessage?: string;
   imageSrcs: string[];
+  /** JSON / text attachments shown inline (like screenshots). */
+  codeBlocks: { label: string; text: string }[];
   otherAttachments: { label: string; href: string }[];
   children: StepModel[];
   /** Call site from Playwright (when available). */ location?: {
@@ -178,6 +180,34 @@ function isVideoAttachment(contentType: string, name: string): boolean {
   return /(^|[^/])trace[^/]*\.zip$/i.test(name.replace(/\\/g, "/"));
 }
 
+/** Inline monospace block for JSON and similar text (not as a separate download link). */
+function isInlineCodeAttachment(
+  contentType: string | undefined,
+  name: string,
+): boolean {
+  const ct = (contentType ?? "").toLowerCase();
+  if (/^application\/(.*\+)?json\b/i.test(ct)) return true;
+  if (ct.startsWith("text/") && /\.json$/i.test(name)) return true;
+  if (/\.json$/i.test(name)) return true;
+  return false;
+}
+
+const MAX_INLINE_CODE_CHARS = 500_000;
+
+function attachmentBodyToUtf8(body: Buffer | string): string {
+  return typeof body === "string" ? body : body.toString("utf8");
+}
+
+function prettyJsonIfPossible(raw: string): string {
+  const t = raw.trim();
+  if (!t) return raw;
+  try {
+    return JSON.stringify(JSON.parse(t), null, 2);
+  } catch {
+    return raw;
+  }
+}
+
 function collectStepTitles(steps: StepModel[]): string[] {
   const out: string[] = [];
   for (const s of steps) {
@@ -254,8 +284,27 @@ export default class CustomReport implements Reporter {
   }
 
   onBegin(config: FullConfig, _suite: Suite): void {
-    if (this.lockRepositoryRoot) return;
-    this.configDir = this.resolvePlaywrightConfigDirectory(config);
+    // Use the resolved config file directory first. The VS Code Playwright extension often runs the
+    // test host with a different `process.cwd()` than the terminal; `config.configFile` still points
+    // at the real `playwright.config.*`, so output and asset paths match `npx playwright test`.
+    const cf = config.configFile?.trim();
+    if (cf) {
+      try {
+        const absCfg = path.isAbsolute(cf)
+          ? cf
+          : path.resolve(this.injectedConfigDir, cf);
+        const cfgDir = path.dirname(absCfg);
+        if (directoryContainsPlaywrightConfig(cfgDir)) {
+          this.configDir = path.resolve(cfgDir);
+          return;
+        }
+      } catch {
+        /* invalid path from test host */
+      }
+    }
+    if (!this.lockRepositoryRoot) {
+      this.configDir = this.resolvePlaywrightConfigDirectory(config);
+    }
   }
 
   /**
@@ -495,7 +544,9 @@ export default class CustomReport implements Reporter {
     //console.log(`[custom-report] Resolved configDir (repo root for sources): ${this.configDir}`,);
 
     // eslint-disable-next-line no-console
-    console.log(`[custom-report] > ${outDir}${this.lockRepositoryRoot ? " (locked to playwright.config repositoryRoot)" : ""}`,);
+    console.log(
+      `[custom-report] > ${outDir}${this.lockRepositoryRoot ? " (locked to playwright.config repositoryRoot)" : ""}`,
+    );
 
     // eslint-disable-next-line no-console
     //console.log(indexAbs);
@@ -627,9 +678,33 @@ export default class CustomReport implements Reporter {
     outDir: string,
   ): Promise<StepModel> {
     const imageSrcs: string[] = [];
+    const codeBlocks: { label: string; text: string }[] = [];
     const otherAttachments: { label: string; href: string }[] = [];
 
     for (const att of step.attachments) {
+      if (isInlineCodeAttachment(att.contentType, att.name)) {
+        try {
+          let raw: string | undefined;
+          if (att.body !== undefined && att.body !== null) {
+            raw = attachmentBodyToUtf8(att.body);
+          } else if (att.path) {
+            raw = await fs.readFile(att.path, "utf8");
+          }
+          if (raw !== undefined) {
+            let display = prettyJsonIfPossible(raw);
+            if (display.length > MAX_INLINE_CODE_CHARS) {
+              display =
+                display.slice(0, MAX_INLINE_CODE_CHARS) +
+                "\n\n… (truncated for report size)";
+            }
+            codeBlocks.push({ label: att.name, text: display });
+          }
+        } catch {
+          /* skip unreadable inline attachment */
+        }
+        continue;
+      }
+
       const destName = `${randomUUID().slice(0, 12)}-${sanitizeFileName(att.name)}`;
       const destAbs = path.join(assetsDir, destName);
 
@@ -689,6 +764,7 @@ export default class CustomReport implements Reporter {
         ? stripAnsi(step.error.message)
         : undefined,
       imageSrcs,
+      codeBlocks,
       otherAttachments,
       children,
       location,
@@ -1557,6 +1633,43 @@ export default class CustomReport implements Reporter {
               box-shadow: 0 0 0 2px
                 color-mix(in srgb, var(--link) 45%, transparent);
             }
+            .step-code-block {
+              margin: 0.35rem 0 0.45rem;
+              padding: 0.4rem 0.45rem;
+              background: var(--bg);
+              border-radius: 6px;
+              border: 1px solid var(--border);
+              max-width: 100%;
+              overflow: hidden;
+            }
+            .step-code-block-label {
+              font-size: 0.6875rem;
+              font-weight: 600;
+              color: var(--muted);
+              margin: 0 0 0.35rem;
+              text-transform: uppercase;
+              letter-spacing: 0.04em;
+            }
+            .step-code-block pre {
+              margin: 0;
+              padding: 0.45rem 0.5rem;
+              font-size: 0.6575rem;
+              line-height: 1.45;
+              font-family:
+                ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+              background: var(--panel);
+              border: 1px solid var(--border);
+              border-radius: 4px;
+              overflow-x: auto;
+              white-space: pre;
+              color: var(--text);
+              max-height: 500px;
+              overflow-y: auto;
+            }
+            .step-code-block code {
+              font-family: inherit;
+              font-size: inherit;
+            }
             .shot-lightbox {
               display: none;
               position: fixed;
@@ -1900,6 +2013,16 @@ export default class CustomReport implements Reporter {
             .join("")
         : "";
 
+    const code =
+      step.codeBlocks.length > 0
+        ? step.codeBlocks
+            .map(
+              (b) =>
+                `<div class="step-code-block"><div class="step-code-block-label">${escapeHtml(b.label)}</div><pre><code>${escapeHtml(b.text)}</code></pre></div>`,
+            )
+            .join("")
+        : "";
+
     const others =
       step.otherAttachments.length > 0
         ? `<div class="step-inline-attach-links">${step.otherAttachments.map((o) => `<a class="attach-link" href="${escapeHtml(o.href)}">${escapeHtml(o.label)}</a>`).join("")}</div>`
@@ -1914,7 +2037,7 @@ export default class CustomReport implements Reporter {
         ? step.children.map((c) => this.renderStep(c, depth + 1)).join("")
         : "";
 
-    /** Screenshots first so expanding a step shows the capture immediately. */ const bodyInner = `${imgs}${meta}${err}${others}${kids}`;
+    /** Screenshots and inline JSON first so expanding a step shows artifacts immediately. */ const bodyInner = `${imgs}${code}${meta}${err}${others}${kids}`;
 
     if (depth === 0) {
       const rid = randomUUID().slice(0, 12);

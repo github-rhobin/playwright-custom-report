@@ -57,7 +57,8 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "web-tests",
+      testMatch: "**/*.web.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
         viewport: {
@@ -65,6 +66,10 @@ export default defineConfig({
           height: 1080,
         },
       },
+    },
+    {
+      name: "api-tests",
+      testMatch: "**/*.api.spec.ts",
     },
 
     // {
